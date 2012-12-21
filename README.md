@@ -28,6 +28,12 @@ grunt.initConfig({
 
                 assets[.extension] = { merged files of extension type }
 
+            e.g. all JS from bower packages will end up in assets.js; all css in assets.css
+
+            Files are merged according to dependency rules, such that a file is
+            listed after files upon which it depends.
+        */
+
             
 
         dest: 'public',
