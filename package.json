@@ -1,7 +1,7 @@
 {
   "name": "grunt-bowerful",
   "description": "Specify bower packages directly in grunt file.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/gyllstromk/grunt-bowerful",
   "author": {
     "name": "Karl Gyllstrom",
@@ -28,10 +28,14 @@
   "scripts": {
     "test": "grunt test"
   },
-  "devDependencies": {
-    "grunt": "~0.3.17",
+  "dependencies": {
     "bower": "~0.6.8"
   },
+
+  "devDependencies": {
+    "grunt": "~0.3.17"
+  },
+
   "keywords": [
     "gruntplugin"
   ]
