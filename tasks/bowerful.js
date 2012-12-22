@@ -34,23 +34,18 @@ module.exports = function(grunt) {
                         json.main = [ json.main ];
                     }
 
-                    deps[package] = Object.keys(json.dependencies);
+                    deps[package] = Object.keys(json.dependencies || {});
                     configs[package] = json;
                 });
-                console.log(deps);
 
                 function write(packageName) {
-                    console.log('eee', packageName);
                     var package = grunt.file.readJSON(path.join(config.directory, packageName, 'component.json'));
-                    console.log('writing package', packageName);
                     (deps[package.name] || []).forEach(function(dep) {
-                        console.log('ee', dep);
                         if (! written[dep]) {
                             write(dep);
                         }
                     });
 
-                    console.log('pack', package);
                     if (! Array.isArray(package.main)) {
                         package.main = [ package.main ];
                     }
@@ -106,7 +101,7 @@ module.exports = function(grunt) {
 
         if (Object.keys(invert).length > 0) {
             new Manager(Object.keys(packages),
-                { endpointNames: invert }).on('install', function() { console.log('www');installed(packages); }).resolve();
+                { endpointNames: invert }).on('install', function() { installed(packages); }).resolve();
         } else {
             installed(packages);
         }

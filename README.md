@@ -1,18 +1,14 @@
-# grunt-bowerful
+# grunt-bowerful: install + concat bower packages directly from grunt file.
 
-Forget the components.json!: install your bower packages directly from grunt.
+Who needs a `components.json` file?! Not you.
 
 ## Getting Started
+
 Install this grunt plugin next to your project's [grunt.js gruntfile][getting_started] with: `npm install grunt-bowerful`
 
-Then add this line to your project's `grunt.js` gruntfile:
-
-```javascript
-grunt.loadNpmTasks('grunt-bowerful');
-```
+Then add this to your project's `grunt.js` gruntfile:
 
 ```js
-
 grunt.initConfig({
     bowerful: {
         /*
@@ -34,28 +30,30 @@ grunt.initConfig({
             listed after files upon which it depends.
         */
 
-            
-
         dest: 'public',
+
+        /**
+
+          Include packages. Version number can be omitted.
+
+        */
+
         packages: {
             bootstrap: '~2.2.1',
-            jquery: '~1.8.3',
+            jquery: '',
             ember: '~1.0.0-pre.2'
         },
     }
 ```
 
+And import tasks via:
+
+```js
+grunt.loadNpmTasks('grunt-bowerful');
+```
+
 [grunt]: http://gruntjs.com/
 [getting_started]: https://github.com/gruntjs/grunt/blob/master/docs/getting_started.md
-
-## Documentation
-_(Coming soon)_
-
-## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt][grunt].
-
-## Release History
-_(Nothing yet)_
 
 ## License
 Copyright (c) 2012 Karl Gyllstrom  
