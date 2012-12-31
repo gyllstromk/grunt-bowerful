@@ -29,7 +29,7 @@ module.exports = function(grunt) {
                 var contents = {};
 
                 Object.keys(packages).forEach(function(package) {
-                    var json = grunt.file.readJSON(path.join(config.directory, package, 'component.json'));
+                    var json = grunt.file.readJSON(path.join(config.directory, package.split('/').pop(), 'component.json'));
                     if (! Array.isArray(json.main)) {
                         json.main = [ json.main ];
                     }
@@ -39,7 +39,7 @@ module.exports = function(grunt) {
                 });
 
                 function write(packageName) {
-                    var package = grunt.file.readJSON(path.join(config.directory, packageName, 'component.json'));
+                    var package = grunt.file.readJSON(path.join(config.directory, packageName.split('/').pop(), 'component.json'));
                     (deps[package.name] || []).forEach(function(dep) {
                         if (! written[dep]) {
                             write(dep);
