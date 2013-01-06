@@ -69,7 +69,7 @@ module.exports = function(grunt) {
                     written[package.name] = true;
                 }
 
-                grunt.util._.keys(configs).forEach(write);
+                grunt.utils._.keys(configs).forEach(write);
 
                 Object.keys(contents).forEach(function(ext) {
                     grunt.file.write(path.join(config.dest, 'assets' + ext), contents[ext]);
