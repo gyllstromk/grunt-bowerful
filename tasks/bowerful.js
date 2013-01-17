@@ -62,7 +62,11 @@ module.exports = function(grunt) {
                         if (! fs.existsSync(file)) {
                             grunt.log.error(file + ' not found. Skipping.');
                         } else {
-                            contents[ext] += grunt.file.read(file);
+                            try {
+                                contents[ext] += grunt.file.read(file);
+                            } catch (error) {
+                                grunt.log.error(file + ' not readable. Skipping.');
+                            }
                         }
                     });
 
