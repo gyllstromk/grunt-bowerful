@@ -17,6 +17,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('bowerful', 'Install bower packages.', function() {
         var path = require('path'),
+            util = require('util'),
             fs = require('fs');
 
         var done = this.async();
@@ -29,7 +30,27 @@ module.exports = function(grunt) {
                 var contents = {};
 
                 Object.keys(packages).forEach(function(package) {
-                    var json = grunt.file.readJSON(path.join(config.directory, package.split('/').pop(), 'component.json'));
+                    var base = path.join(config.directory, package.split('/').pop());
+                    var json = grunt.file.readJSON(path.join(base, 'component.json'));
+
+                    if (! json.main) {
+                        grunt.log.error(util.format('Package %s did not specify a `main` file in components.json.', package));
+                        grunt.log.error('Trying `package.json`');
+                        var content = grunt.file.readJSON(path.join(base, 'package.json'));
+                        json.main = content.main;
+                    }
+
+                    if (! json.main) {
+                        grunt.log.error('Nothing in `package.json`. Reverting to guesswork based on package name.');
+                        var guess = path.join(base, package + '.js');
+                        if (fs.existsSync(guess)) {
+                            grunt.log.error(util.format('%s exists, assuming this is the correct file.', guess));
+                            json.main = guess;
+                        } else {
+                            grunt.log.error(util.format('Cannot find main file for %s. Please install manually (or file bug report to %s with your grunt.js).', package, 'https://github.com/gyllstromk/grunt-bowerful/issues'));
+                        }
+                    }
+
                     if (! Array.isArray(json.main)) {
                         json.main = [ json.main ];
                     }
@@ -39,16 +60,12 @@ module.exports = function(grunt) {
                 });
 
                 function write(packageName) {
-                    var package = grunt.file.readJSON(path.join(config.directory, packageName.split('/').pop(), 'component.json'));
+                    var package = configs[packageName];
                     (deps[package.name] || []).forEach(function(dep) {
                         if (! written[dep]) {
                             write(dep);
                         }
                     });
-
-                    if (! Array.isArray(package.main)) {
-                        package.main = [ package.main ];
-                    }
 
                     package.main.forEach(function(file) {
                         var ext = path.extname(file);
@@ -56,17 +73,14 @@ module.exports = function(grunt) {
                             contents[ext] = '';
                         }
 
-                        var file = path.join(config.directory, package.name,
-                            file);
+                        var base = path.join(config.directory, package.name);
+
+                        file = path.join(config.directory, package.name, file);
 
                         if (! fs.existsSync(file)) {
                             grunt.log.error(file + ' not found. Skipping.');
                         } else {
-                            try {
-                                contents[ext] += grunt.file.read(file);
-                            } catch (error) {
-                                grunt.log.error(file + ' not readable. Skipping.');
-                            }
+                            contents[ext] += grunt.file.read(file);
                         }
                     });
 
