@@ -61,6 +61,10 @@ module.exports = function(grunt) {
 
                 function write(packageName) {
                     var package = configs[packageName];
+                    if (! package) {
+                        return;
+                    }
+
                     (deps[package.name] || []).forEach(function(dep) {
                         if (! written[dep]) {
                             write(dep);

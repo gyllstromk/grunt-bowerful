@@ -1,7 +1,7 @@
 {
   "name": "grunt-bowerful",
   "description": "Specify bower packages directly in grunt file.",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "homepage": "https://github.com/gyllstromk/grunt-bowerful",
   "author": {
     "name": "Karl Gyllstrom",
@@ -21,7 +21,9 @@
     }
   ],
   "main": "grunt.js",
-  "bin": "bin/grunt-bowerful",
+  "bin": {
+    "grunt-bowerful": "bin/grunt-bowerful"
+  },
   "engines": {
     "node": "*"
   },
@@ -31,12 +33,13 @@
   "dependencies": {
     "bower": "~0.6.8"
   },
-
   "devDependencies": {
     "grunt": "~0.3.17"
   },
-
   "keywords": [
     "gruntplugin"
-  ]
+  ],
+  "readme": "# grunt-bowerful: install + concat bower packages directly from grunt file.\n\nWho needs a `components.json` file?! Not you.\n\n## Getting Started\n\nInstall this grunt plugin next to your project's [grunt.js gruntfile][getting_started] with: `npm install grunt-bowerful`\n\nThen add this to your project's `grunt.js` gruntfile:\n\n```js\ngrunt.initConfig({\n    bowerful: {\n        /**\n            store (optional) -> path where components are installed. defaults\n            to 'components'\n        */\n\n        store: 'components',\n\n        /**\n            dest (optional) -> directory where files will be merged. Merged\n            files take the form:\n\n                assets[.extension] = { merged files of extension type }\n\n            e.g. all JS from bower packages will end up in assets.js; all css in assets.css\n\n            Files are merged according to dependency rules, such that a file is\n            concatenated after files upon which it depends.\n        */\n\n        dest: 'public',\n\n        /**\n            @packages (required) -> object of `package name: package version`\n            key/value pairs. Version can be left blank.\n        */\n\n        packages: {\n            bootstrap: '~2.2.1',\n            jquery: '',\n            ember: '~1.0.0-pre.2'\n        },\n    }\n```\n\nAnd import tasks via:\n\n```js\ngrunt.loadNpmTasks('grunt-bowerful');\n```\n\n[grunt]: http://gruntjs.com/\n[getting_started]: https://github.com/gruntjs/grunt/blob/master/docs/getting_started.md\n\n## License\nCopyright (c) 2012 Karl Gyllstrom  \nLicensed under the MIT license.\n",
+  "_id": "grunt-bowerful@0.1.4",
+  "_from": "grunt-bowerful"
 }
