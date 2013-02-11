@@ -1,7 +1,7 @@
 {
   "name": "grunt-bowerful",
   "description": "Specify bower packages directly in grunt file.",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "homepage": "https://github.com/gyllstromk/grunt-bowerful",
   "author": {
     "name": "Karl Gyllstrom",
@@ -9,10 +9,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/karl/grunt-bowerful.git"
+    "url": "git://github.com/gyllstromk/grunt-bowerful.git"
   },
   "bugs": {
-    "url": "https://github.com/karl/grunt-bowerful/issues"
+    "url": "https://github.com/gyllstromk/grunt-bowerful/issues"
   },
   "licenses": [
     {
