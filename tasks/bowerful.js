@@ -106,7 +106,7 @@ module.exports = function(grunt) {
                     written[pkg.name] = true;
                 }
 
-                grunt.utils._.keys(configs).forEach(write);
+                grunt.util._.keys(configs).forEach(write);
 
                 Object.keys(contents).forEach(function(ext) {
                     grunt.file.write(path.join(config.dest, 'assets' + ext), contents[ext]);
@@ -120,7 +120,7 @@ module.exports = function(grunt) {
 
         // manager endpointNames argument requires inverted packages
         var invert = {};
-        grunt.utils._.keys(packages).forEach(function(key) {
+        grunt.util._.keys(packages).forEach(function(key) {
             if (! fs.existsSync(path.join(config.directory, key))) {
                 invert[packages[key]] = key;
             } else {
@@ -128,12 +128,30 @@ module.exports = function(grunt) {
             }
         });
 
-        if (Object.keys(invert).length > 0) {
-            new Manager(Object.keys(packages),
-                { endpointNames: invert }).on('install', function() { installed(packages); }).resolve();
-        } else {
-            installed(packages);
-        }
+        var packageNames = Object.keys(packages).map(function(each) {
+            var version = packages[each];
+            if (version) {
+                each += '#' + version;
+            }
+
+            return each;
+        });
+
+        var installField = [ 'install' ].concat(packageNames);
+        var options = {
+            argv: {
+                remain:   installField,
+                cooked:   installField,
+                original: installField
+            }
+        };
+
+        bower.commands
+            .install(packageNames, options)
+            .on('end', function (data) {
+                installed(packages);
+            }
+        );
     });
 
   // ==========================================================================
