@@ -1,7 +1,7 @@
 {
   "name": "grunt-bowerful",
   "description": "Specify bower packages directly in grunt file.",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "homepage": "https://github.com/gyllstromk/grunt-bowerful",
   "author": {
     "name": "Karl Gyllstrom",

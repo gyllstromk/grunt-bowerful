@@ -119,25 +119,21 @@ module.exports = function(grunt) {
         this.requiresConfig('bowerful.packages');
 
         // manager endpointNames argument requires inverted packages
-        var invert = {};
-        grunt.util._.keys(packages).forEach(function(key) {
-            if (! fs.existsSync(path.join(config.directory, key))) {
-                invert[packages[key]] = key;
+        var install = [];
+        grunt.util._.keys(packages).forEach(function(each) {
+            if (! fs.existsSync(path.join(config.directory, each))) {
+                var version = packages[each];
+                if (version) {
+                    each += '#' + version;
+                }
+
+                install.push(each);
             } else {
-                grunt.log.ok(key + ' already installed. Skipping.');
+                grunt.log.ok(each + ' already installed. Skipping.');
             }
         });
 
-        var packageNames = Object.keys(packages).map(function(each) {
-            var version = packages[each];
-            if (version) {
-                each += '#' + version;
-            }
-
-            return each;
-        });
-
-        var installField = [ 'install' ].concat(packageNames);
+        var installField = [ 'install' ].concat(install);
         var options = {
             argv: {
                 remain:   installField,
@@ -146,11 +142,15 @@ module.exports = function(grunt) {
             }
         };
 
-        bower.commands
-            .install(packageNames, options)
-            .on('end', function (data) {
-                installed(packages);
-            }
-        );
+        if (install.length) {
+            bower.commands
+                .install(install, options)
+                .on('end', function (data) {
+                    installed(packages);
+                }
+            );
+        } else {
+            installed(packages);
+        }
     });
 };
