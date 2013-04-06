@@ -31,6 +31,8 @@ module.exports = function(grunt) {
         var packages = this.data.packages;
         config.directory = this.data.directory || 'components';
         config.dest = this.data.dest;
+        config.destfile = this.data.destfile || 'assets';
+        config.customtarget = this.data.customtarget;
 
         function buildConfig(packageName) {
             if (deps[packageName]) {
@@ -99,7 +101,13 @@ module.exports = function(grunt) {
                         if (! fs.existsSync(file)) {
                             grunt.log.error(file + ' not found. Skipping.');
                         } else {
-                            contents[ext] += grunt.file.read(file);
+                            // if we havent specified a custom target default to same file
+                            if(! config.customtarget[pkg.name] ) {
+                                contents[ext] += grunt.file.read(file);
+                            } else {
+                                // write in an individual file
+                                grunt.file.write(path.join(config.customtarget[pkg.name]), grunt.file.read(file));
+                            }
                         }
                     });
 
@@ -109,7 +117,9 @@ module.exports = function(grunt) {
                 grunt.util._.keys(configs).forEach(write);
 
                 Object.keys(contents).forEach(function(ext) {
-                    grunt.file.write(path.join(config.dest, 'assets' + ext), contents[ext]);
+                    if( contents[ext] ) {
+                        grunt.file.write(path.join(config.dest, config.destfile + ext), contents[ext]);
+                    }
                 });
             }
 

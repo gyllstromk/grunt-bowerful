@@ -33,10 +33,33 @@ grunt.initConfig({
 
             dest: 'public',
 
+<<<<<<< HEAD
             /**
                 @packages (required) -> object of `package name: package version`
                 key/value pairs. Version can be left blank.
             */
+=======
+        /**
+            destfile (optional) -> filename that will be used when files are merged. Merged
+            files will default to 'assets' 
+        */
+
+        destfile: 'assets',
+
+        /**
+            customtarget (optional) -> file targets can be manually specified. 
+            key/value pairs. 
+        */
+
+        customtarget: {
+            jquery: 'web/js/vendor/jquery.js'
+        },
+
+        /**
+            @packages (required) -> object of `package name: package version`
+            key/value pairs. Version can be left blank.
+        */
+>>>>>>> config-dest-possible-split-files-differnt-paths
 
             packages: {
                 bootstrap: '~2.2.1',
