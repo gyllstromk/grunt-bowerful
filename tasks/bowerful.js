@@ -32,6 +32,7 @@ module.exports = function(grunt) {
         config.directory = grunt.config.get('bowerful.store') || 'components';
         config.dest = grunt.config.get('bowerful.dest');
         config.destfile = grunt.config.get('bowerful.destfile') || 'assets';
+        config.customtarget = grunt.config.get('bowerful.customtarget');
 
         function buildConfig(packageName) {
             if (deps[packageName]) {
@@ -100,7 +101,13 @@ module.exports = function(grunt) {
                         if (! fs.existsSync(file)) {
                             grunt.log.error(file + ' not found. Skipping.');
                         } else {
-                            contents[ext] += grunt.file.read(file);
+                            // if we havent specified a custom target default to same file
+                            if(! config.customtarget[pkg.name] ) {
+                                contents[ext] += grunt.file.read(file);
+                            } else {
+                                // write in an individual file
+                                grunt.file.write(path.join(config.customtarget[pkg.name]), grunt.file.read(file));
+                            }
                         }
                     });
 
