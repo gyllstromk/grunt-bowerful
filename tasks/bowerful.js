@@ -19,7 +19,7 @@ module.exports = function(grunt) {
   // TASKS
   // ==========================================================================
 
-    grunt.registerTask('bowerful', 'Install bower packages.', function() {
+    grunt.registerMultiTask('bowerful', 'Install bower packages.', function() {
         var done = this.async();
         var deps = {};
         var configs = {};
@@ -28,9 +28,9 @@ module.exports = function(grunt) {
         var config = require('bower/lib/core/config');
         var Manager = require('bower/lib/core/manager');
 
-        var packages = grunt.config.get('bowerful.packages');
-        config.directory = grunt.config.get('bowerful.store') || 'components';
-        config.dest = grunt.config.get('bowerful.dest');
+        var packages = this.data.packages;
+        config.directory = this.data.directory || 'components';
+        config.dest = this.data.dest;
 
         function buildConfig(packageName) {
             if (deps[packageName]) {
@@ -115,8 +115,6 @@ module.exports = function(grunt) {
 
             done();
         }
-
-        this.requiresConfig('bowerful.packages');
 
         // manager endpointNames argument requires inverted packages
         var install = [];

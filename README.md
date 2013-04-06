@@ -11,37 +11,39 @@ Then add this to your project's `grunt.js` gruntfile:
 ```js
 grunt.initConfig({
     bowerful: {
-        /**
-            store (optional) -> path where components are installed. defaults
-            to 'components'
-        */
+        dist: {
+            /**
+                store (optional) -> path where components are installed. defaults
+                to 'components'
+            */
 
-        store: 'components',
+            store: 'components',
 
-        /**
-            dest (optional) -> directory where files will be merged. Merged
-            files take the form:
+            /**
+                dest (optional) -> directory where files will be merged. Merged
+                files take the form:
 
-                assets[.extension] = { merged files of extension type }
+                    assets[.extension] = { merged files of extension type }
 
-            e.g. all JS from bower packages will end up in assets.js; all css in assets.css
+                e.g. all JS from bower packages will end up in assets.js; all css in assets.css
 
-            Files are merged according to dependency rules, such that a file is
-            concatenated after files upon which it depends.
-        */
+                Files are merged according to dependency rules, such that a file is
+                concatenated after files upon which it depends.
+            */
 
-        dest: 'public',
+            dest: 'public',
 
-        /**
-            @packages (required) -> object of `package name: package version`
-            key/value pairs. Version can be left blank.
-        */
+            /**
+                @packages (required) -> object of `package name: package version`
+                key/value pairs. Version can be left blank.
+            */
 
-        packages: {
-            bootstrap: '~2.2.1',
-            jquery: '',
-            ember: '~1.0.0-pre.2'
-        },
+            packages: {
+                bootstrap: '~2.2.1',
+                jquery: '',
+                ember: '~1.0.0-pre.2'
+            },
+        }
     }
 ```
 
