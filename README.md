@@ -33,12 +33,6 @@ grunt.initConfig({
 
             dest: 'public',
 
-<<<<<<< HEAD
-            /**
-                @packages (required) -> object of `package name: package version`
-                key/value pairs. Version can be left blank.
-            */
-=======
         /**
             destfile (optional) -> filename that will be used when files are merged. Merged
             files will default to 'assets' 
@@ -59,7 +53,6 @@ grunt.initConfig({
             @packages (required) -> object of `package name: package version`
             key/value pairs. Version can be left blank.
         */
->>>>>>> config-dest-possible-split-files-differnt-paths
 
             packages: {
                 bootstrap: '~2.2.1',
