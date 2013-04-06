@@ -31,6 +31,7 @@ module.exports = function(grunt) {
         var packages = grunt.config.get('bowerful.packages');
         config.directory = grunt.config.get('bowerful.store') || 'components';
         config.dest = grunt.config.get('bowerful.dest');
+        config.destfile = grunt.config.get('bowerful.destfile') || 'assets';
 
         function buildConfig(packageName) {
             if (deps[packageName]) {
@@ -109,7 +110,7 @@ module.exports = function(grunt) {
                 grunt.util._.keys(configs).forEach(write);
 
                 Object.keys(contents).forEach(function(ext) {
-                    grunt.file.write(path.join(config.dest, 'assets' + ext), contents[ext]);
+                    grunt.file.write(path.join(config.dest, config.destfile + ext), contents[ext]);
                 });
             }
 
