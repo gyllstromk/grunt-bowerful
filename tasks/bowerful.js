@@ -32,7 +32,7 @@ module.exports = function(grunt) {
         config.directory = grunt.config.get('bowerful.store') || 'components';
         config.dest = grunt.config.get('bowerful.dest');
         config.destfile = grunt.config.get('bowerful.destfile') || 'assets';
-        config.customtarget = grunt.config.get('bowerful.customtarget');
+        config.customtarget = grunt.config.get('bowerful.customtarget') || {};
 
         function buildConfig(packageName) {
             if (deps[packageName]) {
