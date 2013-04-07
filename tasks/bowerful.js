@@ -32,7 +32,7 @@ module.exports = function(grunt) {
         config.directory = this.data.directory || 'components';
         config.dest = this.data.dest;
         config.destfile = this.data.destfile || 'assets';
-        config.customtarget = this.data.customtarget;
+        config.customtarget = this.data.customtarget || {};
 
         function buildConfig(packageName) {
             if (deps[packageName]) {
