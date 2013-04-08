@@ -49,11 +49,13 @@ grunt.initConfig({
                 eg: Changing ext to something else, example '.less' or '.scss' 
             */
 
-            customtarget: {
-                jquery: 'web/js/vendor/jquery', // this will generate jquery.js and jquery.css files if they exist on package
+            customtarget: { 
+                // this will generate jquery.js and jquery.css files if they exist on package
+                jquery: 'web/js/vendor/jquery', 
+                // note that you can overwrite the filename and extension to anything else.
                 otherlib: {
                     js: 'path/to/destination.js',
-                    css: 'path/to/destination.scss' // note that you can overwrite the filename and extension to anything else.
+                    css: 'path/to/destination.scss'
                 }
             },
 
