@@ -19,7 +19,7 @@ module.exports = function(grunt) {
   // TASKS
   // ==========================================================================
 
-    grunt.registerTask('bowerful', 'Install bower packages.', function() {
+    grunt.registerMultiTask('bowerful', 'Install bower packages.', function() {
         var done = this.async();
         var deps = {};
         var configs = {};
@@ -28,9 +28,11 @@ module.exports = function(grunt) {
         var config = require('bower/lib/core/config');
         var Manager = require('bower/lib/core/manager');
 
-        var packages = grunt.config.get('bowerful.packages');
-        config.directory = grunt.config.get('bowerful.store') || 'components';
-        config.dest = grunt.config.get('bowerful.dest');
+        var packages = this.data.packages;
+        config.directory = this.data.directory || 'components';
+        config.dest = this.data.dest;
+        config.destfile = this.data.destfile || 'assets';
+        config.customtarget = this.data.customtarget || {};
 
         function buildConfig(packageName) {
             if (deps[packageName]) {
@@ -74,7 +76,38 @@ module.exports = function(grunt) {
 
                 Object.keys(packages).forEach(buildConfig);
 
-                function write(packageName) {
+                var appendContent = function(file, ext) {
+                    contents[ext] += grunt.file.read(file);
+                };
+
+                var updateContent = function( pkg, file, ext ) {
+
+                    // if we havent specified a custom target default to same file
+                    if(! config.customtarget[pkg.name] ) {
+                        appendContent(file, ext);
+                    } else {
+                        // first use extension to allow lookup on config data
+                        var _ext = ext.replace('.', ''); 
+
+                        // check if we have a custom path based on extension for example customtarget['js'] 
+                        // if the target exists use its file path destination, if they dont check to see
+                        // if the general definition is a string example 'myfilename', if it is use it to name the file and add ext to it
+                        // if we still dont have a valid target, append to our default merged file.
+                        var _target = config.customtarget[pkg.name][_ext] ? 
+                            config.customtarget[pkg.name][_ext] : 
+                                typeof config.customtarget[pkg.name] === 'string' ? 
+                                    config.customtarget[pkg.name] + ext :
+                                    false;
+
+                        if( _target ) {
+                            grunt.file.write(path.join(_target), grunt.file.read(file));
+                        } else {
+                            appendContent(file, ext);
+                        }
+                    }
+                };
+
+                var write = function(packageName) {
                     var pkg = configs[packageName];
                     if (! pkg) {
                         return;
@@ -99,24 +132,24 @@ module.exports = function(grunt) {
                         if (! fs.existsSync(file)) {
                             grunt.log.error(file + ' not found. Skipping.');
                         } else {
-                            contents[ext] += grunt.file.read(file);
+                            updateContent( pkg, file, ext );
                         }
                     });
 
                     written[pkg.name] = true;
-                }
+                };
 
                 grunt.util._.keys(configs).forEach(write);
 
                 Object.keys(contents).forEach(function(ext) {
-                    grunt.file.write(path.join(config.dest, 'assets' + ext), contents[ext]);
+                    if( contents[ext] ) {
+                        grunt.file.write(path.join(config.dest, config.destfile + ext), contents[ext]);
+                    }
                 });
             }
 
             done();
         }
-
-        this.requiresConfig('bowerful.packages');
 
         // manager endpointNames argument requires inverted packages
         var install = [];
