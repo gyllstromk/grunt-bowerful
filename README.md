@@ -42,8 +42,11 @@ grunt.initConfig({
 
             /**
                 customtarget (optional) -> file targets can be manually specified. 
-                string - fullpath string without any extenstion, this will be added automaticly
-                key/value pairs. - fullpath string with extensions, extensions can be overwritten to something else, example '.less' or '.scss' 
+
+                string - fullpath string without any extenstion, this will be added automaticly.
+
+                key/value pairs. - fullpath string with extensions, extensions can be overwritten. 
+                eg: Changing ext to something else, example '.less' or '.scss' 
             */
 
             customtarget: {
