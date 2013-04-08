@@ -76,7 +76,38 @@ module.exports = function(grunt) {
 
                 Object.keys(packages).forEach(buildConfig);
 
-                function write(packageName) {
+                var appendContent = function(file, ext) {
+                    contents[ext] += grunt.file.read(file);
+                };
+
+                var updateContent = function( pkg, file, ext ) {
+
+                    // if we havent specified a custom target default to same file
+                    if(! config.customtarget[pkg.name] ) {
+                        appendContent(file, ext);
+                    } else {
+                        // first use extension to allow lookup on config data
+                        var _ext = ext.replace('.', ''); 
+
+                        // check if we have a custom path based on extension for example customtarget['js'] 
+                        // if the target exists use its file path destination, if they dont check to see
+                        // if the general definition is a string example 'myfilename', if it is use it to name the file and add ext to it
+                        // if we still dont have a valid target, append to our default merged file.
+                        var _target = config.customtarget[pkg.name][_ext] ? 
+                            config.customtarget[pkg.name][_ext] : 
+                                typeof config.customtarget[pkg.name] === 'string' ? 
+                                    config.customtarget[pkg.name] + ext :
+                                    false;
+
+                        if( _target ) {
+                            grunt.file.write(path.join(_target), grunt.file.read(file));
+                        } else {
+                            appendContent(file, ext);
+                        }
+                    }
+                };
+
+                var write = function(packageName) {
                     var pkg = configs[packageName];
                     if (! pkg) {
                         return;
@@ -101,18 +132,12 @@ module.exports = function(grunt) {
                         if (! fs.existsSync(file)) {
                             grunt.log.error(file + ' not found. Skipping.');
                         } else {
-                            // if we havent specified a custom target default to same file
-                            if(! config.customtarget[pkg.name] ) {
-                                contents[ext] += grunt.file.read(file);
-                            } else {
-                                // write in an individual file
-                                grunt.file.write(path.join(config.customtarget[pkg.name]), grunt.file.read(file));
-                            }
+                            updateContent( pkg, file, ext );
                         }
                     });
 
                     written[pkg.name] = true;
-                }
+                };
 
                 grunt.util._.keys(configs).forEach(write);
 

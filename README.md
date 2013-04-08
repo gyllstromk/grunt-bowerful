@@ -42,11 +42,16 @@ grunt.initConfig({
 
             /**
                 customtarget (optional) -> file targets can be manually specified. 
-                key/value pairs. 
+                string - fullpath string without any extenstion, this will be added automaticly
+                key/value pairs. - fullpath string with extensions, extensions can be overwritten to something else, example '.less' or '.scss' 
             */
 
             customtarget: {
-                jquery: 'web/js/vendor/jquery.js'
+                jquery: 'web/js/vendor/jquery', // this will generate jquery.js and jquery.css files if they exist on package
+                otherlib: {
+                    js: 'path/to/destination.js',
+                    css: 'path/to/destination.scss' // note that you can overwrite the filename and extension to anything else.
+                }
             },
 
             /**
