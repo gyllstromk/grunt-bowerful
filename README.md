@@ -72,9 +72,16 @@ grunt.initConfig({
                     // use the 'select' field to indicate the particular files
                     // to be used. Otherwise, all files specified in the `main`
                     // field of the package's `component.json` (or, failing
-                    // that, `package.json`) file will be used
+                    // that, `package.json`) file will be used. This may be
+                    either a `String` or `Array`
 
                     select: [ 'handlebars.js' ],
+
+                    // additionally, use the `exclude` field to indicate files
+                    // you *do not* wish to include in the concatenated
+                    // version. This may be either a `String` or `Array`
+
+                    exclude: [ 'handlebars.runtime.js' ],
                     version: '~1.0.0-rc.3'
                 },
 

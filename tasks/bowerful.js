@@ -65,10 +65,16 @@ module.exports = function(grunt) {
                 json.main = [ json.main ];
             }
 
-            var select = cherryPicks[packageName];
-            if (select) {
+            var picks = cherryPicks[packageName];
+            if (picks.select) {
                 json.main = json.main.filter(function (each) {
-                    return select.indexOf(each) !== -1;
+                    return picks.select.indexOf(each) !== -1;
+                });
+            }
+
+            if (picks.exclude) {
+                json.main = json.main.filter(function (each) {
+                    return picks.exclude.indexOf(each) === -1;
                 });
             }
 
@@ -164,8 +170,19 @@ module.exports = function(grunt) {
         grunt.util._.keys(packages).forEach(function(each) {
             var version = packages[each];
 
+            cherryPicks[each] = {};
+
             if (typeof version === 'object') {
-                cherryPicks[each] = version.select;
+                [ 'select', 'exclude' ].forEach(function (inclusionType) {
+                    if (version[inclusionType]) {
+                        if (! Array.isArray(version[inclusionType])) {
+                            version[inclusionType] = [ version[inclusionType] ];
+                        }
+
+                        cherryPicks[each][inclusionType] = version[inclusionType];
+                    }
+                });
+
                 version = version.version;
             }
 
