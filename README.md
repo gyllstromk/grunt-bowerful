@@ -66,7 +66,18 @@ grunt.initConfig({
 
             packages: {
                 bootstrap: '~2.2.1',
-                jquery: '',
+                jquery: '', // when version not specified, most recent will be
+                            // used
+                handlebars: {
+                    // use the 'select' field to indicate the particular files
+                    // to be used. Otherwise, all files specified in the `main`
+                    // field of the package's `component.json` (or, failing
+                    // that, `package.json`) file will be used
+
+                    select: [ 'handlebars.js' ],
+                    version: '~1.0.0-rc.3'
+                },
+
                 ember: '~1.0.0-pre.2'
             },
         }
