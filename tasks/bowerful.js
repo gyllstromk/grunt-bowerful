@@ -47,8 +47,8 @@ module.exports = function(grunt) {
             }
 
             if (! json.main) {
-                grunt.log.error(util.format('Package %s did not specify a `main` file in components.json.', packageName));
-                grunt.log.error('Trying `bower.json`');
+                grunt.log.debug(util.format('Package %s did not specify a `main` file in components.json.', packageName));
+                grunt.log.debug('Trying `bower.json`');
 
                 if (grunt.file.exists(path.join(base, 'bower.json'))) {
                     json = grunt.file.readJSON(path.join(base, 'bower.json'));
@@ -56,8 +56,8 @@ module.exports = function(grunt) {
             }
 
             if (! json.main) {
-                grunt.log.error(util.format('Package %s did not specify a `main` file in bower.json.', packageName));
-                grunt.log.error('Trying `package.json`');
+                grunt.log.debug(util.format('Package %s did not specify a `main` file in bower.json.', packageName));
+                grunt.log.debug('Trying `package.json`');
 
                 if (grunt.file.exists(path.join(base, 'package.json'))) {
                     var content = grunt.file.readJSON(path.join(base, 'package.json'));
@@ -66,10 +66,10 @@ module.exports = function(grunt) {
             }
 
             if (! json.main) {
-                grunt.log.error('Nothing in `package.json`. Reverting to guesswork based on package name.');
+                grunt.log.debug('Nothing in `package.json`. Reverting to guesswork based on package name.');
                 var guess = path.join(base, packageName + '.js');
                 if (fs.existsSync(guess)) {
-                    grunt.log.error(util.format('%s exists, assuming this is the correct file.', guess));
+                    grunt.log.debug(util.format('%s exists, assuming this is the correct file.', guess));
                     json.main = guess;
                 } else {
                     grunt.log.error(util.format('Cannot find main file for %s. Please install manually (or file bug report to %s with your grunt.js).', packageName, 'https://github.com/gyllstromk/grunt-bowerful/issues'));
