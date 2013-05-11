@@ -44,6 +44,13 @@ module.exports = function(grunt) {
 
             if (! json.main) {
                 grunt.log.error(util.format('Package %s did not specify a `main` file in components.json.', packageName));
+                grunt.log.error('Trying `bower.json`');
+                var content = grunt.file.readJSON(path.join(base, 'bower.json'));
+                json.main = content.main;
+            }
+
+            if (! json.main) {
+                grunt.log.error(util.format('Package %s did not specify a `main` file in components.json.', packageName));
                 grunt.log.error('Trying `package.json`');
                 var content = grunt.file.readJSON(path.join(base, 'package.json'));
                 json.main = content.main;
