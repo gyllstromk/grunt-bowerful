@@ -40,20 +40,29 @@ module.exports = function(grunt) {
             }
 
             var base = path.join(config.directory, packageName.split('/').pop());
-            var json = grunt.file.readJSON(path.join(base, 'component.json'));
+            var json = {};
 
-            if (! json.main) {
-                grunt.log.error(util.format('Package %s did not specify a `main` file in components.json.', packageName));
-                grunt.log.error('Trying `bower.json`');
-                var content = grunt.file.readJSON(path.join(base, 'bower.json'));
-                json.main = content.main;
+            if (grunt.file.exists(path.join(base, 'component.json'))) {
+                json = grunt.file.readJSON(path.join(base, 'component.json'));
             }
 
             if (! json.main) {
                 grunt.log.error(util.format('Package %s did not specify a `main` file in components.json.', packageName));
+                grunt.log.error('Trying `bower.json`');
+
+                if (grunt.file.exists(path.join(base, 'bower.json'))) {
+                    json = grunt.file.readJSON(path.join(base, 'bower.json'));
+                }
+            }
+
+            if (! json.main) {
+                grunt.log.error(util.format('Package %s did not specify a `main` file in bower.json.', packageName));
                 grunt.log.error('Trying `package.json`');
-                var content = grunt.file.readJSON(path.join(base, 'package.json'));
-                json.main = content.main;
+
+                if (grunt.file.exists(path.join(base, 'package.json'))) {
+                    var content = grunt.file.readJSON(path.join(base, 'package.json'));
+                    json.main = content.main;
+                }
             }
 
             if (! json.main) {
