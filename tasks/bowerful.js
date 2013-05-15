@@ -30,7 +30,7 @@ module.exports = function(grunt) {
         var Manager = require('bower/lib/core/manager');
 
         var packages = this.data.packages;
-        config.directory = this.data.directory || 'components';
+        config.directory = this.data.store || 'components';
         config.dest = this.data.dest;
         config.destfile = this.data.destfile || 'assets';
         config.customtarget = this.data.customtarget || {};
