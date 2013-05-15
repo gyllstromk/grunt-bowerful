@@ -41,7 +41,17 @@ module.exports = function(grunt) {
             }
 
             var base = path.join(config.directory, packageName.split('/').pop());
-            var json = grunt.file.readJSON(path.join(base, 'component.json'));
+
+            var componentJson = path.join(base, 'bower.json');
+            if (! fs.existsSync(componentJson)) {
+                componentJson = path.join(base, 'component.json');
+            }
+
+            var json = {};
+
+            if (fs.existsSync(componentJson)) {
+                json = grunt.file.readJSON(componentJson);
+            }
 
             if (! json.main) {
                 grunt.log.error(util.format('Package %s did not specify a `main` file in components.json.', packageName));
