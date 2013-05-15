@@ -75,7 +75,7 @@ module.exports = function(grunt) {
                 json.main = [ json.main ];
             }
 
-            var picks = cherryPicks[packageName];
+            var picks = cherryPicks[packageName] || {};
             if (picks.select) {
                 json.main = json.main.filter(function (each) {
                     return picks.select.indexOf(each) !== -1;
