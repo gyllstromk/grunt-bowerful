@@ -53,10 +53,11 @@ module.exports = function(grunt) {
                 json = grunt.file.readJSON(componentJson);
             }
 
-            if (! json.main) {
+            var packageJson = path.join(base, 'package.json');
+            if (! json.main && fs.existsSync(packageJson)) {
                 grunt.log.error(util.format('Package %s did not specify a `main` file in components.json.', packageName));
                 grunt.log.error('Trying `package.json`');
-                var content = grunt.file.readJSON(path.join(base, 'package.json'));
+                var content = grunt.file.readJSON(packageJson);
                 json.main = content.main;
             }
 
