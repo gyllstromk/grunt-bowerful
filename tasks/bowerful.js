@@ -122,8 +122,12 @@ module.exports = function(grunt) {
                                 typeof config.customtarget[pkg.name] === 'string' ? 
                                     config.customtarget[pkg.name] + ext :
                                     false;
-
-                        if( _target ) {
+                                    
+                        if(grunt.file.isDir(file)) {
+                            grunt.file.recurse(file, function(abspath, rootdir, subdir, filename) {
+                                grunt.file.copy(abspath, path.join(_target, subdir, filename));
+                            });
+                        } else if( _target ) {
                             grunt.file.write(path.join(_target), grunt.file.read(file));
                         } else {
                             appendContent(file, ext);
