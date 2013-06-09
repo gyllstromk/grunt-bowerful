@@ -102,6 +102,11 @@ grunt.loadNpmTasks('grunt-bowerful');
 [grunt]: http://gruntjs.com/
 [getting_started]: https://github.com/gruntjs/grunt/blob/master/docs/getting_started.md
 
+## Contributers
+
+* @mitermayer
+* @johannestroeger
+
 ## License
 Copyright (c) 2012 Karl Gyllstrom  
 Licensed under the MIT license.
