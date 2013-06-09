@@ -53,19 +53,26 @@ module.exports = function(grunt) {
                 json = grunt.file.readJSON(componentJson);
             }
 
-            if (! json.main) {
+            var packageJson = path.join(base, 'package.json');
+            if (! json.main && fs.existsSync(packageJson)) {
                 grunt.log.error(util.format('Package %s did not specify a `main` file in components.json.', packageName));
                 grunt.log.error('Trying `package.json`');
-                var content = grunt.file.readJSON(path.join(base, 'package.json'));
+                var content = grunt.file.readJSON(packageJson);
                 json.main = content.main;
             }
 
             if (! json.main) {
                 grunt.log.error('Nothing in `package.json`. Reverting to guesswork based on package name.');
-                var guess = path.join(base, packageName + '.js');
+
+                var fileNameGuess = packageName; 
+                if (path.extname(fileNameGuess) !== '.js') {
+                    fileNameGuess += '.js';
+                }
+
+                var guess = path.join(base, fileNameGuess);
                 if (fs.existsSync(guess)) {
                     grunt.log.error(util.format('%s exists, assuming this is the correct file.', guess));
-                    json.main = guess;
+                    json.main = fileNameGuess;
                 } else {
                     grunt.log.error(util.format('Cannot find main file for %s. Please install manually (or file bug report to %s with your grunt.js).', packageName, 'https://github.com/gyllstromk/grunt-bowerful/issues'));
                 }
