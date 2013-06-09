@@ -23,6 +23,7 @@ module.exports = function(grunt) {
         var done = this.async();
         var deps = {};
         var configs = {};
+        var cherryPicks = {};
 
         var bower = require('bower');
         var config = require('bower/lib/core/config');
@@ -40,7 +41,17 @@ module.exports = function(grunt) {
             }
 
             var base = path.join(config.directory, packageName.split('/').pop());
-            var json = grunt.file.readJSON(path.join(base, 'component.json'));
+
+            var componentJson = path.join(base, 'bower.json');
+            if (! fs.existsSync(componentJson)) {
+                componentJson = path.join(base, 'component.json');
+            }
+
+            var json = {};
+
+            if (fs.existsSync(componentJson)) {
+                json = grunt.file.readJSON(componentJson);
+            }
 
             if (! json.main) {
                 grunt.log.error(util.format('Package %s did not specify a `main` file in components.json.', packageName));
@@ -62,6 +73,19 @@ module.exports = function(grunt) {
 
             if (! Array.isArray(json.main)) {
                 json.main = [ json.main ];
+            }
+
+            var picks = cherryPicks[packageName] || {};
+            if (picks.select) {
+                json.main = json.main.filter(function (each) {
+                    return picks.select.indexOf(each) !== -1;
+                });
+            }
+
+            if (picks.exclude) {
+                json.main = json.main.filter(function (each) {
+                    return picks.exclude.indexOf(each) === -1;
+                });
             }
 
             deps[packageName] = Object.keys(json.dependencies || []);
@@ -98,8 +122,12 @@ module.exports = function(grunt) {
                                 typeof config.customtarget[pkg.name] === 'string' ? 
                                     config.customtarget[pkg.name] + ext :
                                     false;
-
-                        if( _target ) {
+                                    
+                        if(grunt.file.isDir(file)) {
+                            grunt.file.recurse(file, function(abspath, rootdir, subdir, filename) {
+                                grunt.file.copy(abspath, path.join(_target, subdir, filename));
+                            });
+                        } else if( _target ) {
                             grunt.file.write(path.join(_target), grunt.file.read(file));
                         } else {
                             appendContent(file, ext);
@@ -154,8 +182,25 @@ module.exports = function(grunt) {
         // manager endpointNames argument requires inverted packages
         var install = [];
         grunt.util._.keys(packages).forEach(function(each) {
+            var version = packages[each];
+
+            cherryPicks[each] = {};
+
+            if (typeof version === 'object') {
+                [ 'select', 'exclude' ].forEach(function (inclusionType) {
+                    if (version[inclusionType]) {
+                        if (! Array.isArray(version[inclusionType])) {
+                            version[inclusionType] = [ version[inclusionType] ];
+                        }
+
+                        cherryPicks[each][inclusionType] = version[inclusionType];
+                    }
+                });
+
+                version = version.version;
+            }
+
             if (! fs.existsSync(path.join(config.directory, each))) {
-                var version = packages[each];
                 if (version) {
                     each += '#' + version;
                 }
