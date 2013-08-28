@@ -6,7 +6,7 @@ By default, files are concatenated and written to the `dest` location according 
 
 ## Getting Started
 
-Install this grunt plugin next to your project's [grunt.js gruntfile][getting_started] with: `npm install grunt-bowerful`
+Install this grunt plugin next to your project's [grunt.js gruntfile][getting_started] with: `npm install grunt-bowerful --save-dev`
 
 Then add this to your project's `Gruntfile.js`:
 
@@ -28,7 +28,7 @@ grunt.initConfig({
                     // to be used. Otherwise, all files specified in the `main`
                     // field of the package's `component.json` (or, failing
                     // that, `package.json`) file will be used. This may be
-                    either a `String` or `Array`
+                    // either a `String` or `Array`
 
                     select: [ 'handlebars.js' ],
 
